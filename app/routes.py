@@ -1,3 +1,4 @@
+from flask import jsonify
 from app import app, db, ma, jwt
 from models import User, Artwork, Gallery
 
@@ -20,4 +21,4 @@ def get_gallery(id):
     gallery = Gallery.query.get(id)
     if gallery:
         return jsonify(gallery.to_dict()), 200
-    return jsonify({'message'; 'Gallery not found'}), 404
+    return jsonify;"({'message'; 'Gallery not found'})", 404
