@@ -1,4 +1,3 @@
-# models.py
 from app import db, ma
 
 class User(db.Model):
@@ -23,6 +22,6 @@ class Artwork(db.Model):
     price = db.Column(db.DECIMAL(10, 2))
     genre = db.Column(db.String(64))
 
-# Define other models here 
+ 
                       
                 

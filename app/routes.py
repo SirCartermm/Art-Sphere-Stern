@@ -1,4 +1,3 @@
-#routes.py
 from app import app, db, ma, jwt
 from models import User, Artwork
 
@@ -24,3 +23,5 @@ def login():
 def get_artwork():
     artwork = Artwork.query.all()
     return jsonify([artwork.to_dict() for artwork in artwork]), 200
+
+
