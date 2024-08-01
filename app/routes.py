@@ -21,3 +21,6 @@ def login():
     return jsonify({'message': 'Invalid credentials'}), 401
 
 @app.route('/artwork', methods=['GET'])
+def get_artwork():
+    artwork = Artwork.query.all()
+    return jsonify([artwork.to_dict() for artwork in artwork]), 200
