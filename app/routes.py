@@ -13,3 +13,11 @@ def get_artwork(id):
     if artwork:
         return jsonify(artwork.to_dict()), 200
     return jsonify({'message': 'Artwork not found'}), 404
+
+
+@app.route('/galleries/<int:id>',methods=['GET'])
+def get_gallery(id):
+    gallery = Gallery.query.get(id)
+    if gallery:
+        return jsonify(gallery.to_dict()), 200
+    return jsonify({'message'; 'Gallery not found'}), 404
