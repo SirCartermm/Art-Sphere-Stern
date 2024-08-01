@@ -16,4 +16,13 @@ class User(db.Model):
     
 class Artwork(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    
+    artist_id = db.column(db.Integer, db.Foreignkey('user.id'))
+    title = db.Column(db.string(128), nullable=False)
+    description = db.column(db.Text)
+    image_url = db.Column(db.String(128))
+    price = db.Column(db.DECIMAL(10, 2))
+    genre = db.Column(db.String(64))
+
+# Define other models here 
+                      
+                
