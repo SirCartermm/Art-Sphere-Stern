@@ -22,6 +22,14 @@ class Artwork(db.Model):
     price = db.Column(db.DECIMAL(10, 2))
     genre = db.Column(db.String(64))
 
- 
+ class Gallery(db.model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128), nullable=False)
+    admin_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+ class ArtworkGallery(db.Model):
+    artwork_id = db.Column(db.Integer, db.ForeignKey('artwork.id'))
+    gallery_id = db.column(db.Integer, db.ForeignKey('gallery.id'))
+    
                       
                 
