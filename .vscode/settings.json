@@ -1,7 +1,13 @@
 {
     "cSpell.words": [
+        "aarch",
+        "itsdangerous",
         "jsonify",
-        "sqlalchemy"
+        "markupsafe",
+        "pipfile",
+        "pypi",
+        "sqlalchemy",
+        "werkzeug"
     ],
     "python.analysis.extraPaths": [
         "./app"
