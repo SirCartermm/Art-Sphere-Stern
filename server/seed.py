@@ -3,17 +3,17 @@ from models import User, Artwork, Gallery, Order
 from werkzeug.security import generate_password_hash
 from datetime import datetime
 
-# Create the Flask app context
+
 app = create_app()
 app.app_context().push()
 
-# Function to seed the database
+
 def seed():
-    # Drop all tables and recreate them
+   
     db.drop_all()
     db.create_all()
 
-    # Create some initial users
+  
     admin = User(
         username='admin', 
         email='admin@example.com', 
@@ -38,14 +38,14 @@ def seed():
     db.session.add(viewer)
     db.session.commit()  
 
-    # Create a gallery and some artworks
+   
     gallery = Gallery(
         name='Modern Art', 
         description='A gallery of modern art pieces', 
         admin_id=admin.id
     )
     db.session.add(gallery)
-    db.session.commit()  # Commit to generate the gallery ID
+    db.session.commit()  
 
     artwork1 = Artwork(
         title='Abstract Painting', 
@@ -64,9 +64,9 @@ def seed():
 
     db.session.add(artwork1)
     db.session.add(artwork2)
-    db.session.commit()  # Commit all changes
+    db.session.commit() 
 
-      # Create some orders
+    
     order1 = Order(
         artwork_id=artwork1.id,
         buyer_id=viewer.id,
@@ -87,11 +87,10 @@ def seed():
 
     db.session.add(order1)
     db.session.add(order2)
-    db.session.commit()  # Commit all changes
+    db.session.commit() 
 
 
     print("Database seeded with initial data.")
 
-# Main block to execute the seed function
 if __name__ == '__main__':
     seed()

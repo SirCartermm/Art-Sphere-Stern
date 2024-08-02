@@ -9,8 +9,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///artsphere.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['JWT_SECRET_KEY'] = 'your-secret-key'  # Change this to a secure secret key
-
+app.config['JWT_SECRET_KEY'] = 'your-secret-key' 
 CORS(app)
 
 db = SQLAlchemy(app)

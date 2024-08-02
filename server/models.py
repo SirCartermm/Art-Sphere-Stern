@@ -12,7 +12,7 @@ class User(db.Model, SerializerMixin):
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
-    role = db.Column(db.String(20), default='viewer')  # Roles: admin, artist, viewer
+    role = db.Column(db.String(20), default='viewer')  
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     artworks = db.relationship('Artwork', back_populates='artist')
@@ -47,7 +47,7 @@ class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     artwork_id = db.Column(db.Integer, db.ForeignKey('artwork.id'), nullable=False)
     buyer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    status = db.Column(db.String(20), default='Pending')  # States: Pending, Confirmed, Shipped, Delivered, Completed
+    status = db.Column(db.String(20), default='Pending') 
     total_price = db.Column(db.Float, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now)
     digital_certificate = db.Column(db.String(255), nullable=True)
