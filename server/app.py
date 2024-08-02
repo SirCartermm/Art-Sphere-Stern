@@ -46,6 +46,7 @@ def create_app():
         
     # Routes
     api.add_resource(Artworks, '/artworks', '/artworks/<int:artwork_id>')
+    # api.add_resource(Gallery, '/gallery/<int:gallery/<int:gallery_id>')
 
     return app
 
