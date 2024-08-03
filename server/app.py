@@ -1,9 +1,10 @@
 from flask import Flask, request
-from flask_restful import Api, Resource
+from flask_restful import Api, Resource # type: ignore
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from models import db, Artwork
-from flask_cors import CORS
+from flask_cors import CORS # type: ignore
+from models import db, Artwork
 
 def create_app():
     app = Flask(__name__)
@@ -20,7 +21,9 @@ def create_app():
                 artwork = Artwork.query.get_or_404(artwork_id)
                 return artwork.to_dict()
             else:
-                artworks = Artwork.query.all()
+                page = request.args.get('page', 1, type=int)
+                per_page = request.args.get('per_page', 10, type=int)
+                artworks = Artwork.query.paginate(page, per_page, False)
                 return [artwork.to_dict() for artwork in artworks]
 
         def post(self):
