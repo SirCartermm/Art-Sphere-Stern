@@ -1,7 +1,7 @@
 # app/models.py
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from sqlalchemy_serializer import SerializerMixin
+from "sqlalchemy_serializer" import SerializerMixin # type: ignore
 
 db = SQLAlchemy()
 
@@ -41,7 +41,10 @@ class Gallery(db.Model, SerializerMixin):
     admin_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     
     artworks = db.relationship('Artwork', back_populates='gallery')
-
+class ArtworkGalllery(db.Model):
+    artwork_id = db.Column(db.Integer, db.ForeignKey('artwork.id)'), primary_key=True)
+    gallery_id = db.Column(db.Interger, db.Foreignkey('gallery.id)'), primary_key=True)
+    
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
