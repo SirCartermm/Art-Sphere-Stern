@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, jsonify, make_response, session
 from flask_restful import Api, Resource
 from flask_login import login_user, logout_user, login_required, current_user
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from config import app, db, login_manager
 from models import Artwork, Category, User, Payment, ArtistArtwork, UserRequest, Artist, Transaction
 from datetime import datetime
-
+import logging
 api = Api(app)
 
 class Index(Resource):
@@ -86,11 +86,16 @@ class CheckSession(Resource):
     def get(self):
         user_id = session.get('user_id')
         if user_id:
-            user = User.query.filter_by(id=user_id).first()
-            if user:
-                return user.to_dict(), 200
-            else:
-                return {"error": "User not found"}, 404
+            try:
+                user = User.query.filter_by(id=user_id).first()
+                if user:
+                    return user.to_dict(), 200
+                else:
+                    logging.warning(f"User with id {user_id} not found")
+                    return {"error": "User not found"}, 404
+            except Exception as e:
+                logging.error(f"Error retrieving user: {e}")
+                return {"error": "Internal Server Error"}, 500
         else:
             return {"error": "Unauthorized"}, 401
 
