@@ -46,4 +46,24 @@ class Gallery(db.Model, SerializerMixin):
 
     admin = db.relationship('User', back_populates='galleries')
     artworks = db.relationship('Artwork', back_populates ='gallery')
+class ArtworkGallery(db.Model):
+      artwork_id = db.Column(db.Integer, db.ForeignKey('artwork.id'), primary_Key=True)
+      gallery_id = db.Column(db.Integer, db.ForeignKey('gallery.id'), primary_key=True)
 
+class Order(db.Model):
+     id = db.Column(db.Integer, primary_key=True)
+     artwork_id = db.Column(db.Integer, db.ForeignKey('artwork.id'), nullable=False)
+     buyer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+     status = db.Column(db.Enum('pending', 'confirmed', 'shipped', 'delivered', 'completed'), nullable=False, default='pending')
+     total_price = db.Column(db.Float, nullable=False)
+     created_at = db.Column(db.DDateTime, default=datetime.utcnow)
+     delivery_details = db.Column(db.String(200), nullable=True)
+     certificate_of_authenticity_id = db.Column(db.Integer, nullable=True)
+
+     artwork  = db.relationship('Artwork', back_populates='orders')
+     buyer = db.relationship('User', back_populates='orders')
+
+class OrderSchema(Schema):
+     class Meta:
+          fields = ('id', 'artwork_id', 'buyer_id', 'status','total_price', 'created_at', 'payment_status', 'delivery_details','certificate_of_authenticity_id' )
+          
