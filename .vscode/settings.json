@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "aarch",
+        "artsphere",
         "itsdangerous",
         "jsonify",
         "markupsafe",
@@ -10,6 +11,7 @@
         "werkzeug"
     ],
     "python.analysis.extraPaths": [
-        "./app"
+        "./app",
+        "./server"
     ]
 }
