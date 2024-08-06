@@ -16,5 +16,49 @@ def get_galleries():
 @gallery_routes.route('/gallery/<int:gallery_id>', methods=['GET'])
 def get_gallery(gallery_id):
     gallery = Gallery.query.get(gallery_id)
-    
+    if gallery:
+        return jsonify({'id': gallery.id, 'name': gallery.name, 'admin_id': gallery.admin_id})
+    return jsonify({'message': 'Gallery not found'}), 404
+
+@gallery_routes.route('/gallery', methods=['POST'])
+@jwt_requireed
+def created_galley():
+    data = request.get_json()
+    gallery = Gallery(name=data['name'], admin_id=get_jwt_identity())
+    db.session.add(gallery)
+    db.session.commit()
+    return jsonify({'message': 'Gallery created successfully'}), 201
+
+@gallery_routes.routes('/gallery/<int:gallery_id>', methods=['PUT'])
+@jwt_required
+def update_gallery(gallery_id):
+    gallery = Gallery.query.get(gallery_id)
+    if gallery:
+        data = request.get_json()
+        gallery.name = data['name']
+        db.session.commit()
+        return jsonify({'message': 'Gallery updated successfully'})
+    return jsonify({'message': 'Gallery not found'}), 404
+
+@gallery_routes.route('gallery/<int:gallery_id>', methods=['DELETE'])
+@jwt_required
+def delete_gallery(gallery_id)
+    gallery = Gallery.query.get(gallery_id)
+    if gallery:
+        db.session.delete(gallery)
+        db.session.commit()
+        return jsonify({'message': 'Gallery deleted successfully'})
+    return jsonify({'message': 'Gallery not found'}), 404
+
+
+@order_routes.route('/order/,int:order_id>', methods=['GET'])
+@jwt_required
+def get_order(order_id):
+    order = Order.query.get(order_id)
+    if order:
+        schema = OrderSchema()
+        return jsonify(schema.dump(order))
+    return jsonify({'message': 'Order not found'}), 404
+
+                       
     
