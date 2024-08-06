@@ -121,5 +121,5 @@ def seed_database():
     create_transactions()
     print("Database seeded successfully!")
 
-if _name_ == '_main_':
+if __name__ == '_main_':
     seed_database()
