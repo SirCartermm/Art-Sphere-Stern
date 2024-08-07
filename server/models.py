@@ -33,6 +33,7 @@ class Artwork(db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     bp = db.Column(db.Float, nullable=False)
     sp = db.Column(db.Float, nullable=False)
+    featured = db.Column(db.Boolean, default=False)
 
     def to_dict(self):
         return {
@@ -122,3 +123,12 @@ class Transaction(db.Model):
             'amount': self.amount,
             'transaction_date': self.transaction_date.strftime('%Y-%m-%d %H:%M:%S')
         }
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    message = db.Column(db.String(256))
+    is_read = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('User', backref=db.backref('notifications', lazy=True))
+   

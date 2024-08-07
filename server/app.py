@@ -1,10 +1,10 @@
-from flask import Flask, request, jsonify, make_response, session
+from flask import Flask, request, jsonify, make_response, session,Blueprint
 from flask_restful import Api, Resource
 from flask_login import login_user, logout_user, login_required, current_user
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from werkzeug.security import generate_password_hash, check_password_hash
 from config import app, db, login_manager
-from models import Artwork, Category, User, Payment, ArtistArtwork, UserRequest, Artist, Transaction
+from models import Artwork, Category, User, Payment, ArtistArtwork, UserRequest, Artist, Transaction, Notification
 from datetime import datetime
 import logging
 api = Api(app)
@@ -369,8 +369,67 @@ class TransactionDetail(Resource):
         if not transaction:
             return {'error': 'Transaction not found'}, 404
         return transaction.to_dict()
+    
+#Admin Blueprint
+admin_bp = Blueprint('admin', __name__)
 
-# Add the resources to the API
+@admin_bp.route('/deactivate-user/<int:user_id>', methods=['POST'])
+def deactivate_user(user_id):
+    user = User.query.get(user_id)
+    if user:
+        user.is_active = False
+        db.session.commit()
+        return jsonify({'message': 'User deactivated successfully'})
+    return jsonify({'message': 'User not found'}), 404
+
+@admin_bp.route('/activate-user/<int:user_id>', methods=['POST'])
+def activate_user(user_id):
+    user = User.query.get(user_id)
+    if user:
+        user.is_active = True
+        db.session.commit()
+        return jsonify({'message': 'User activated successfully'})
+    return jsonify({'message': 'User not found'}), 404
+
+@admin_bp.route('/update-featured/<int:artwork_id>', methods=['POST'])
+def update_featured(artwork_id):
+    data = request.json
+    artwork = Artwork.query.get(artwork_id)
+    if artwork:
+        artwork.featured = data.get('featured', False)
+        db.session.commit()
+        return jsonify({'message': 'Artwork updated successfully'})
+    return jsonify({'message': 'Artwork not found'}), 404
+
+# Notification Blueprint
+notifications_bp = Blueprint('notifications', __name__)
+
+@notifications_bp.route('/notify', methods=['POST'])
+def create_notification():
+    data = request.json
+    user_id = data.get('user_id')
+    message = data.get('message')
+    user = User.query.get(user_id)
+    
+    if user:
+        notification = Notification(user_id=user_id, message=message)
+        db.session.add(notification)
+        db.session.commit()
+        return jsonify({'message': 'Notification created successfully'})
+    
+    return jsonify({'message': 'User not found'}), 404
+
+@notifications_bp.route('/notifications/<int:user_id>', methods=['GET'])
+def get_notifications(user_id):
+    notifications = Notification.query.filter_by(user_id=user_id).all()
+    return jsonify([{
+        'id': n.id,
+        'message': n.message,
+        'is_read': n.is_read,
+        'created_at': n.created_at
+    } for n in notifications])
+
+
 api.add_resource(Index, '/')
 api.add_resource(SignUp, '/signup')
 api.add_resource(Login, '/login')
@@ -391,6 +450,9 @@ api.add_resource(ArtistArtworkList, '/ArtistArtwork')
 api.add_resource(UserRequestList, '/UserRequest')
 api.add_resource(TransactionList, '/transactions')
 api.add_resource(TransactionDetail, '/transaction/<int:transaction_id>')
+app.register_blueprint(admin_bp, url_prefix='/admin')
+app.register_blueprint(notifications_bp, url_prefix='/api')
+
 
 if __name__ == "__main__":
     app.run(port=5555)
