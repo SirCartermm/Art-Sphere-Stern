@@ -9,7 +9,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(100), nullable=False)
     role = db.Column(db.String(10), default='User')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    is_active = db.Column(db.Boolean, default=True)  # Add this line
+    is_active = db.Column(db.Boolean, default=True)  
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
