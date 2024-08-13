@@ -28,3 +28,20 @@ def logout():
     return jsonify({'message': 'Logged out successfully'}), 200
 
 # Artwork Endpoints 
+@api.route("/artwork/<int:artwork_id>", methods=["GET"])
+def get_artworks():
+    artworks = Artwork.query.get(artwork_id)
+    if artwork:
+        return  jsonify(ArtworkSchema().dump(artwork)), 200
+    return jsonify({"message": "Artwork not found"}), 404
+
+
+@api.route("/artwork", method=["POST"])
+@jwt_required
+def create_artwork():
+    data = request.get_json()
+    artwork = Artwork(**data)
+    db.session.add(artwork)
+    db.session.commit()
+    return jsonify({"message": "Artwork created successfully"}), 201
+
