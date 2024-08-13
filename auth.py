@@ -26,3 +26,5 @@ def login():
 @jwt_required
 def logout():
     return jsonify({'message': 'Logged out successfully'}), 200
+
+# Artwork Endpoints 
