@@ -45,3 +45,22 @@ def create_artwork():
     db.session.commit()
     return jsonify({"message": "Artwork created successfully"}), 201
 
+@api.route("/gallery/<int;gallery_id>", methods=["DELETE"])
+@jwt_required
+def delete_gallery(gallery_id):
+    gallery = Gallery.query.get(gallery_id)
+    if gallery:
+        db.session.delee(gallery)
+        db.session.commit()
+        return jsonify({"message": "Gallery created successfully"}), 200
+    return jsonify({"message": "Gallery not found"}), 404
+
+@api.route("/gallery/<int:gallery_id>" methods=["DELETE"])
+@jwt_required
+def delete_gallery(gallery_id):
+    gallery = Gallery.query.get(gallery_id)
+    if gallery:
+        db.session.delete(gallery)
+        db.session.commit()
+        return jsonify({"message": "Gallery deleted successfully"}), 200
+    return jsonify({"message": "Gallery not found "}), 404
