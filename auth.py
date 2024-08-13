@@ -1,5 +1,5 @@
 from flask import jsonify, request
-from app import app, jwt
+from app import app, jwt , db
 from models import User
 from modelsUser,  imports User # type: ignore
 
@@ -18,4 +18,11 @@ def login():
     data = request.get_json()
     user = User.query.filter_by(username=data['username']).first()
     if user and user.check_password(data['password']):
-        access_token = jwt.create_access
+        access_token = jwt.create_access_token(identify=user.id)
+        return jsonify ({'access_token': access_token}), 200
+    return jsonify({'message': 'Invalid credentials'}), 401
+
+@app.route('/auth/logout', methods=['POST'])
+@jwt_required
+def logout():
+    return jsonify({'message': 'Logged out successfully'}), 200
