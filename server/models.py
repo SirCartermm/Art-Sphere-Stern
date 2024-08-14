@@ -33,7 +33,7 @@ class Artwork(db.Model, SerializerMixin):
     gallery_id = db.Column(db.Integer, db.ForeignKey('gallery.id'), nullable=True)
 
     artist = db.relationship('User', back_populates='artworks')
-    gallery = db.relationship('Gallery', back_populates='artworks')
+    galleries = db.relationship('Gallery', secondary ='artwork_gallery' back_populates='artworks')
     orders = db.relationship('Order', back_populates='artwork')
 
 class Gallery(db.Model, SerializerMixin):
@@ -45,7 +45,7 @@ class Gallery(db.Model, SerializerMixin):
     admin_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     admin = db.relationship('User', back_populates='galleries')
-    artworks = db.relationship('Artwork', back_populates='gallery')
+    artworks = db.relationship('Artwork', secondary= 'artwork_gallery', back_populates='galleries')
 
 class ArtworkGallery(db.Model):
     artwork_id = db.Column(db.Integer, db.ForeignKey('artwork.id'), primary_key=True)

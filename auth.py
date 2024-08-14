@@ -1,6 +1,6 @@
 from flask import jsonify, request
 from app import app, jwt , db
-from models import User
+from models import User, Artwork, Gallery, ArtworkGallery
 from modelsUser,  imports User # type: ignore
 
 @app.route('/auth/signup', methods=['POST'])
@@ -28,22 +28,21 @@ def logout():
     return jsonify({'message': 'Logged out successfully'}), 200
 
 # Artwork Endpoints 
-@api.route("/artwork/<int:artwork_id>", methods=["GET"])
+@app.route("/artwork/<int:artwork_id>", methods=["GET"])
 def get_artworks():
     artworks = Artwork.query.get(artwork_id)
+    return  jsonify(ArtworkSchema(many=True).dump(artworks)), 200
+    
+
+@api.route("/artwork/<int:artwork_id>", method=["GET"])
+def get_artwork():
+    artwork = Artwork.query.all()
+    return jsonify(ArtworkSchema(many=True).dump(artwork)), 200
+
+@app.route('/artwork/<int:artwork_id')
     if artwork:
-        return  jsonify(ArtworkSchema().dump(artwork)), 200
-    return jsonify({"message": "Artwork not found"}), 404
-
-
-@api.route("/artwork", method=["POST"])
-@jwt_required
-def create_artwork():
-    data = request.get_json()
-    artwork = Artwork(**data)
-    db.session.add(artwork)
-    db.session.commit()
-    return jsonify({"message": "Artwork created successfully"}), 201
+        return jsonify(ArtworkSchema().(artwork_id)
+        return jsonify({"message": "Artwork created successfully"}), 201
 
 @api.route("/gallery/<int;gallery_id>", methods=["DELETE"])
 @jwt_required
