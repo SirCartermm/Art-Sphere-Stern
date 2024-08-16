@@ -1,6 +1,5 @@
 from datetime import datetime
 from app import User, Artist, Artwork, Exhibition, ArtworkExhibition, Favorite, bcrypt, app, db
-# from .config import db
 
 def seed():
     with app.app_context():
