@@ -468,7 +468,7 @@ def seed():
             artwork_id=artwork2.id
         )
         favorite3 = Favorite(
-            user_id=user5.id,
+            user_id= user5.id,
             artwork_id=artwork3.id
         )
         db.session.add_all([favorite1, favorite2, favorite3])
